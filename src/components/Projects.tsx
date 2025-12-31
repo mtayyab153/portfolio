@@ -3,11 +3,11 @@ import { Button } from "@/components/ui/button";
 
 const projects = [
   {
-    title: "Invoice Processing Bot",
-    description: "This process systematically extracts all required information from the source document and accurately records it into the designated portal. Each record is processed individually in a sequential manner to ensure data integrity, precise entry, and complete traceability. By validating and logging each entry one by one, the process minimizes errors, maintains consistency, and enables reliable tracking throughout the entire workflow.",
-    tags: ["RPA", "OCR", "SAP", "Excel"],
-    impact: "Reduced processing time by 85%",
-    githubUrl: "https://github.com/mtayyab153"
+    title: "Intent Classification App",
+    description: "Designed and deployed a text classification solution by training and optimizing a Scikit-learn model on a custom dataset. Applied feature engineering techniques such as tokenization and vectorization to transform raw text into meaningful numerical representations before training the model using classical machine learning algorithms. Evaluated model performance with multiple metrics, including accuracy, precision, recall, and F1-score, and documented key limitations and edge cases related to domain-specific text and data imbalance. Integrated the model into a FastAPI service with prediction and health-check endpoints, and containerized the complete application using Docker for consistent and scalable deployment environments.",
+    tags: ["Python", "Sickit Learn", "Fast Api", "Pandas"],
+    impact: "Built and deployed a scalable intent classification ML service",
+    githubUrl: "https://github.com/mtayyab153/intent_classification_api"
   },
   {
     title: "Todo Management REST API",
@@ -17,11 +17,11 @@ const projects = [
     githubUrl: "https://github.com/mtayyab153/Python/tree/main/Fast%20API/Project%205%20Todo%20App%20Full%20Stack"
   },
   {
-    title: "Intent Classification App",
-    description: "Designed and deployed a text classification solution by training and optimizing a Scikit-learn model on a custom dataset. Applied feature engineering techniques such as tokenization and vectorization to transform raw text into meaningful numerical representations before training the model using classical machine learning algorithms. Evaluated model performance with multiple metrics, including accuracy, precision, recall, and F1-score, and documented key limitations and edge cases related to domain-specific text and data imbalance. Integrated the model into a FastAPI service with prediction and health-check endpoints, and containerized the complete application using Docker for consistent and scalable deployment environments.",
-    tags: ["Python", "Sickit Learn", "Fast Api", "Pandas"],
-    impact: "Built and deployed a scalable intent classification ML service",
-    githubUrl: "https://github.com/mtayyab153/intent_classification_api"
+    title: "Invoice Processing Bot",
+    description: "This process systematically extracts all required information from the source document and accurately records it into the designated portal. Each record is processed individually in a sequential manner to ensure data integrity, precise entry, and complete traceability. By validating and logging each entry one by one, the process minimizes errors, maintains consistency, and enables reliable tracking throughout the entire workflow.",
+    tags: ["RPA", "OCR", "SAP", "Excel"],
+    impact: "Reduced processing time by 85%",
+    githubUrl: "https://github.com/mtayyab153"
   },
   {
     title: "RAG-Based Document QA System",
@@ -110,7 +110,7 @@ const Projects = () => {
                 {project.title}
               </h3>
               
-              <p className="text-muted-foreground text-sm mb-4 flex-grow">
+              <p className="text-muted-foreground text-base mb-4 flex-grow">
                 {project.description}
               </p>
               
