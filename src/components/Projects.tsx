@@ -24,18 +24,18 @@ const projects = [
     githubUrl: "https://github.com/mtayyab153"
   },
   {
-    title: "RAG-Based Document QA System",
-    description: "Built a retrieval-augmented Q&A application that processes PDF document, chunks and embeds content for semantic search, stores vectors in vector database, and generates answers by retrieving relevant information during user queries.",
-    tags: ["Python", "Langchain", "Gemini", "Pinecone"],
-    impact: "Improved security operations by automating threat blocking and incident reporting",
-    githubUrl: "https://github.com/mtayyab153/Python/tree/main/iNueron%20Gen%20Ai/6_chroma_db"
-  },
-  {
     title: "Blocking Malicious IP, Domains and Hashes",
     description: "The process begins with receiving an email containing malicious IPs, domains, and file hashes. These indicators are extracted and stored in a database with an initial status of 'To Work'. Each item is then processed for blocking across the respective security portals. Based on the outcome, their statuses are updated to 'Completed' or 'Failed'. Failed entries are then retried when it is triggered again. At the end of the day, a comprehensive report is generated and sent to the client.",
     tags: ["RPA", "Email", "Oracle", "Reporting"],
     impact: "Enhanced document understanding through accurate, context-aware question answering",
     githubUrl: "https://github.com/mtayyab153"
+  },
+  {
+    title: "RAG-Based Document QA System",
+    description: "Built a retrieval-augmented Q&A application that processes PDF document, chunks and embeds content for semantic search, stores vectors in vector database, and generates answers by retrieving relevant information during user queries.",
+    tags: ["Python", "Langchain", "Gemini", "Pinecone"],
+    impact: "Improved security operations by automating threat blocking and incident reporting",
+    githubUrl: "https://github.com/mtayyab153/Python/tree/main/iNueron%20Gen%20Ai/6_chroma_db"
   },
   {
     title: "Employee Resignation Alerts",
