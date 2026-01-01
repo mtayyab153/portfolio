@@ -17,9 +17,34 @@ cd portfolio
 
 # Step 3: Install the necessary dependencies.
 npm i / npm install
+```
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+**Environment Variables Setup (Required)**
+
+This project uses EmailJS for the contact form.
+You must configure environment variables for it to work.
+
+**Step 4: Create a .env file in the project root**
+```sh
+VITE_EMAILJS_SERVICE_ID=your_service_id
+VITE_EMAILJS_TEMPLATE_ID=your_template_id
+VITE_EMAILJS_PUBLIC_KEY=your_public_key
+```
+
+**⚠️ Important Notes**
+
+- .env should be placed in the root directory (same level as package.json)
+- Environment variables must start with VITE_
+- The .env file is ignored by Git and should not be committed
+
+**Step 5: Run the development server**
+```sh
 npm run dev
+```
+
+The app will be available at:
+```sh
+http://localhost:8080
 ```
 
 **Edit a file directly in GitHub**
@@ -40,8 +65,12 @@ npm run dev
 
 This project is built with:
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+- ⚡ Vite
+
+- 🧠 TypeScript
+
+- ⚛️ React
+
+- 🎨 shadcn/ui
+
+- 💨 Tailwind CSS
