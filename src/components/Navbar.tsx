@@ -8,6 +8,7 @@ const navLinks = [
   { name: "Skills", href: "#skills" },
   { name: "Achievements", href: "#certifications" },
   { name: "Contact", href: "#contact" },
+  { name: "My Resume", href: "/resume.pdf", isDownload: true },
 ];
 
 const Navbar = () => {
@@ -22,10 +23,14 @@ const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const scrollToSection = (href: string) => {
+  const handleNavAction = (href: string, isDownload?: boolean) => {
     setIsMobileMenuOpen(false);
-    const element = document.querySelector(href);
-    element?.scrollIntoView({ behavior: "smooth" });
+    if (isDownload) {
+      window.open(href, "_blank");
+    } else {
+      const element = document.querySelector(href);
+      element?.scrollIntoView({ behavior: "smooth" });
+    }
   };
 
   return (
@@ -48,7 +53,7 @@ const Navbar = () => {
             {navLinks.map((link) => (
               <button
                 key={link.name}
-                onClick={() => scrollToSection(link.href)}
+                onClick={() => handleNavAction(link.href, link.isDownload)}
                 className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
               >
                 {link.name}
@@ -57,7 +62,7 @@ const Navbar = () => {
             <Button 
               size="sm" 
               className="bg-primary text-primary-foreground hover:bg-primary/90"
-              onClick={() => scrollToSection("#contact")}
+              onClick={() => handleNavAction("#contact")}
             >
               Hire Me
             </Button>
@@ -81,7 +86,7 @@ const Navbar = () => {
               {navLinks.map((link) => (
                 <button
                   key={link.name}
-                  onClick={() => scrollToSection(link.href)}
+                  onClick={() => handleNavAction(link.href, link.isDownload)}
                   className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors text-left"
                 >
                   {link.name}
@@ -90,7 +95,7 @@ const Navbar = () => {
               <Button 
                 size="sm" 
                 className="bg-primary text-primary-foreground hover:bg-primary/90 w-full"
-                onClick={() => scrollToSection("#contact")}
+                onClick={() => handleNavAction("#contact")}
               >
                 Hire Me
               </Button>
