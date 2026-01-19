@@ -23,6 +23,15 @@ const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  useEffect(() => {
+    const heroSection = document.querySelector("section");
+    if (isMobileMenuOpen) {
+      heroSection?.classList.add("hidden");
+    } else {
+      heroSection?.classList.remove("hidden");
+    }
+  }, [isMobileMenuOpen]);
+
   const handleNavAction = (href: string, isDownload?: boolean) => {
     setIsMobileMenuOpen(false);
     if (isDownload) {
@@ -81,7 +90,7 @@ const Navbar = () => {
 
         {/* Mobile Navigation */}
         {isMobileMenuOpen && (
-          <div className="md:hidden py-4 border-t border-border">
+          <div className="md:hidden py-4 border-t border-border absolute top-full left-0 right-0 bg-background/95 backdrop-blur-lg z-40">
             <div className="flex flex-col gap-4">
               {navLinks.map((link) => (
                 <button
