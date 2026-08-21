@@ -2,6 +2,30 @@ import { Award, ExternalLink, Calendar } from "lucide-react";
 
 const certifications = [
   {
+    name: "AI Engineer Core Track: LLM Engineering, RAG, QLoRA, Agents",
+    issuer: "Udemy",
+    date: "2026",
+    credentialId: "UC-baafb12b-4ff2-4f05-9cad-4dcdd5578e7a",
+    link: "https://www.udemy.com/certificate/UC-baafb12b-4ff2-4f05-9cad-4dcdd5578e7a/",
+    logo: "🧠"
+  },
+  {
+    name: "AI Engineer Agentic Track: The Complete Agent & MCP Course",
+    issuer: "Udemy",
+    date: "2026",
+    credentialId: "UC-d1d0640d-b9f6-4d20-aeb9-81d8c60110c3",
+    link: "https://www.udemy.com/certificate/UC-d1d0640d-b9f6-4d20-aeb9-81d8c60110c3/",
+    logo: "🔗"
+  },
+  {
+    name: "AI Engineer Production Track: Deploy LLMs & Agents at Scale",
+    issuer: "Udemy",
+    date: "2026",
+    credentialId: "UC-42051883-a00d-40b8-8103-caabb2603298",
+    link: "https://www.udemy.com/certificate/UC-42051883-a00d-40b8-8103-caabb2603298/",
+    logo: "🚀"
+  },
+  {
     name: "UiPath Academy Automation Developer Associate Training",
     issuer: "UiPath",
     date: "2024",
