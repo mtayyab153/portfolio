@@ -2,6 +2,14 @@ import { Award, ExternalLink, Calendar } from "lucide-react";
 
 const certifications = [
   {
+    name: "LFS101: Introduction to Linux",
+    issuer: "The Linux Foundation",
+    date: "2026",
+    credentialId: "7fbf8228-85d4-4e60-8ef9-68d43eb6fcf8",
+    link: "https://www.credly.com/badges/7fbf8228-85d4-4e60-8ef9-68d43eb6fcf8/public_url",
+    logo: "🐧"
+  },
+  {
     name: "AI Engineer Core Track: LLM Engineering, RAG, QLoRA, Agents",
     issuer: "Udemy",
     date: "2026",
