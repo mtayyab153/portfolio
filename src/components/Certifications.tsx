@@ -74,12 +74,28 @@ const certifications = [
     logo: "📋"
   },
   {
+    name: "Pandas",
+    issuer: "Kaggle",
+    date: "2023",
+    credentialId: "KG-PD-2024",
+    link: "https://www.kaggle.com/learn/certification/mtaeyyab/pandas",
+    logo: "🐼"
+  },
+  {
     name: "Python",
     issuer: "Kaggle",
     date: "2023",
     credentialId: "KG-PY-2024",
-    link: "",
+    link: "https://www.kaggle.com/learn/certification/mtaeyyab/python",
     logo: "🐍"
+  },
+  {
+    name: "Intro to Programming",
+    issuer: "Kaggle",
+    date: "2023",
+    credentialId: "KG-IP-2024",
+    link: "https://www.kaggle.com/learn/certification/mtaeyyab/intro-to-programming",
+    logo: "💻"
   }
 ];
 
