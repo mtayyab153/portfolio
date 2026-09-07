@@ -2,9 +2,12 @@ import { Mail, Linkedin, Github, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import emailjs from "@emailjs/browser";
+
+// Optional: when this is unset the form works exactly as before, with no captcha.
+const RECAPTCHA_SITE_KEY = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
 
 
 
@@ -17,6 +20,34 @@ const Contact = () => {
     message: "",
   });
 
+  const captchaRef = useRef<HTMLDivElement>(null);
+  const widgetId = useRef<number | null>(null);
+
+  // Load the reCAPTCHA script on demand, only when a site key is configured.
+  useEffect(() => {
+    if (!RECAPTCHA_SITE_KEY) return;
+
+    const renderWidget = () => {
+      if (!captchaRef.current || widgetId.current !== null) return;
+      widgetId.current = window.grecaptcha!.render(captchaRef.current, {
+        sitekey: RECAPTCHA_SITE_KEY,
+        theme: "dark",
+      });
+    };
+
+    if (window.grecaptcha?.render) {
+      renderWidget();
+      return;
+    }
+
+    window.onRecaptchaLoad = renderWidget;
+    const script = document.createElement("script");
+    script.src = "https://www.google.com/recaptcha/api.js?render=explicit&onload=onRecaptchaLoad";
+    script.async = true;
+    script.defer = true;
+    document.head.appendChild(script);
+  }, []);
+
   // const handleSubmit = (e: React.FormEvent) => {
   //   e.preventDefault();
   //   toast({
@@ -28,6 +59,20 @@ const Contact = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    let captchaToken = "";
+    if (RECAPTCHA_SITE_KEY) {
+      captchaToken = window.grecaptcha?.getResponse(widgetId.current ?? undefined) ?? "";
+      if (!captchaToken) {
+        toast({
+          title: "Please confirm you are human",
+          description: "Complete the verification below, then send your message.",
+          variant: "destructive",
+        });
+        return;
+      }
+    }
+
     setIsLoading(true);
 
     try {
@@ -38,6 +83,7 @@ const Contact = () => {
           user_name: formData.name,
           user_email: formData.email,
           message: formData.message,
+          "g-recaptcha-response": captchaToken,
         },
         import.meta.env.VITE_EMAILJS_PUBLIC_KEY
       );
@@ -48,6 +94,7 @@ const Contact = () => {
       });
 
       setFormData({ name: "", email: "", message: "" });
+      window.grecaptcha?.reset(widgetId.current ?? undefined);
     } catch (error) {
       console.error(error);
       toast({
@@ -171,6 +218,8 @@ const Contact = () => {
               />
             </div>
             
+  {RECAPTCHA_SITE_KEY && <div ref={captchaRef} className="flex justify-center" />}
+
   <Button
     type="submit"
     disabled={isLoading}
