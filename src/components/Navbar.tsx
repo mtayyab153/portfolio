@@ -55,7 +55,7 @@ const Navbar = () => {
     >
       <div className="section-container">
         <div className="flex items-center justify-between h-16">
-          <a href="#" className="flex items-center gap-2 font-heading font-bold text-xl">
+          <a href="#main" className="flex items-center gap-2 font-heading font-bold text-xl">
             <Bot className="w-6 h-6 text-primary" />
             <span>RPA<span className="text-primary">Dev</span></span>
           </a>

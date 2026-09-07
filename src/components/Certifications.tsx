@@ -144,9 +144,10 @@ const Certifications = () => {
                     className="flex items-center gap-1 text-primary hover:underline"
                     target="_blank"
                     rel="noopener noreferrer"
+                    aria-label={`Verify ${cert.name} (opens in a new tab)`}
                   >
                     <span>Verify</span>
-                    <ExternalLink className="w-3 h-3" />
+                    <ExternalLink className="w-3 h-3" aria-hidden="true" />
                   </a>
                 </div>
                 <div className="mt-2 font-mono text-xs text-muted-foreground/70 truncate">

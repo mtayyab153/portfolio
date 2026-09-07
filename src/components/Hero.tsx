@@ -2,10 +2,6 @@ import { ArrowDown, Bot, Workflow } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const Hero = () => {
-  const scrollToProjects = () => {
-    document.getElementById("projects")?.scrollIntoView({ behavior: "smooth" });
-  };
-
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background gradient orbs */}
@@ -31,20 +27,11 @@ const Hero = () => {
         </p>
         
         <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-up-delay-3">
-          <Button 
-            size="lg" 
-            className="bg-primary text-primary-foreground hover:bg-primary/90 font-semibold glow-border"
-            onClick={scrollToProjects}
-          >
-            View My Work
+          <Button asChild size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 font-semibold glow-border">
+            <a href="#projects">View My Work</a>
           </Button>
-          <Button 
-            size="lg" 
-            variant="outline" 
-            className="border-border hover:bg-secondary hover:text-foreground"
-            onClick={() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })}
-          >
-            Get In Touch
+          <Button asChild size="lg" variant="outline" className="border-border hover:bg-secondary hover:text-foreground">
+            <a href="#contact">Get In Touch</a>
           </Button>
         </div>
         

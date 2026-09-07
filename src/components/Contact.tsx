@@ -115,6 +115,7 @@ const Contact = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (isLoading) return;
     setFormError(null);
 
     // Validate before the throttle so the visitor is told what to fix first.
@@ -330,8 +331,8 @@ const Contact = () => {
 
   <Button
     type="submit"
-    disabled={isLoading || cooldownLeft > 0}
-    className="w-full bg-primary text-primary-foreground hover:bg-primary/90 font-semibold disabled:opacity-70 disabled:cursor-not-allowed"
+    aria-disabled={isLoading || cooldownLeft > 0}
+    className="w-full bg-primary text-primary-foreground hover:bg-primary/90 font-semibold aria-disabled:opacity-70 aria-disabled:cursor-not-allowed"
   >
     {isLoading ? (
       <span className="flex items-center justify-center gap-2">
