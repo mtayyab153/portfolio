@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Sora:wght@400;500;600;700&family=Work+Sans:wght@400;500;600&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -118,7 +116,9 @@
   }
 
   .animate-pulse-slow {
-    animation: pulseSlow 4s ease-in-out infinite;
+    /* Finite: an ambient intro rather than permanent compositing work.
+       Animating opacity on a blur-3xl layer repaints for as long as it runs. */
+    animation: pulseSlow 4s ease-in-out 6;
   }
 
   /* Honour a reduced-motion preference: neutralise the fade-ups and stop the

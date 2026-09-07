@@ -10,6 +10,17 @@ export default defineConfig(({ mode }) => ({
     port: 8080,
   },
   plugins: [react(), mode === "development" && componentTagger()].filter(Boolean),
+  build: {
+    rollupOptions: {
+      output: {
+        // React changes far less often than app code; splitting it lets the
+        // immutable cache header keep it across deploys.
+        manualChunks: {
+          react: ["react", "react-dom"],
+        },
+      },
+    },
+  },
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
