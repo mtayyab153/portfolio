@@ -98,10 +98,11 @@ const Projects = () => {
                   <Button 
                     variant="ghost" 
                     size="icon" 
-                    className="opacity-0 group-hover:opacity-100 transition-opacity"
+                    aria-label={`View ${project.title} on GitHub`}
+                    className="opacity-0 transition-opacity group-hover:opacity-100 focus-visible:opacity-100"
                     onClick={() => handleGitHubClick(project.githubUrl!)}
                   >
-                    <ExternalLink className="w-4 h-4" />
+                    <ExternalLink className="w-4 h-4" aria-hidden="true" />
                   </Button>
                 )}
               </div>
