@@ -67,7 +67,7 @@ const Navbar = () => {
                 key={link.name}
                 href={link.href}
                 {...(link.isDownload ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+                className="py-1 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
               >
                 {link.name}
               </a>

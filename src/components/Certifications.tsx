@@ -120,7 +120,7 @@ const Certifications = () => {
           {certifications.map((cert, index) => (
             <div
               key={index}
-              className="group relative bg-card border border-border rounded-xl p-6 hover:border-primary/50 transition-all duration-300 hover:shadow-lg hover:shadow-primary/5"
+              className="group relative min-w-0 bg-card border border-border rounded-xl p-6 hover:border-primary/50 transition-all duration-300 hover:shadow-lg hover:shadow-primary/5"
               style={{ animationDelay: `${index * 100}ms` }}
             >
               <div className="flex items-start gap-4">
@@ -141,7 +141,7 @@ const Certifications = () => {
                   </div>
                   <a
                     href={cert.link}
-                    className="flex items-center gap-1 text-primary hover:underline"
+                    className="inline-flex items-center gap-1 py-1 text-primary hover:underline"
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={`Verify ${cert.name} (opens in a new tab)`}

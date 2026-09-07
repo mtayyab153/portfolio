@@ -37,7 +37,7 @@ const About = () => {
           ))}
         </div>
 
-        <div className="grid md:grid-cols-2 gap-12 items-center">
+        <div className="grid md:grid-cols-2 gap-12 items-center [&>*]:min-w-0">
           <div className="space-y-6">
             <h3 className="text-2xl font-heading font-semibold">What I Do</h3>
             <p className="text-muted-foreground leading-relaxed">
@@ -61,7 +61,7 @@ const About = () => {
             </ul>
           </div>
           
-          <div className="relative">
+          <div className="relative overflow-hidden">
             <div className="bg-gradient-to-br from-secondary to-card border border-border rounded-2xl p-8">
               <div className="font-mono text-sm text-primary mb-4">// automation_bot.py</div>
               <pre className="text-sm text-muted-foreground overflow-x-auto">

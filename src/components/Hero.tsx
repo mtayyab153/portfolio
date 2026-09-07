@@ -35,7 +35,7 @@ const Hero = () => {
           </Button>
         </div>
         
-        <div className="absolute bottom-12 left-1/2 -translate-x-1/2 animate-bounce">
+        <div className="pointer-events-none absolute bottom-12 left-1/2 hidden -translate-x-1/2 animate-bounce sm:block" aria-hidden="true">
           <ArrowDown className="w-6 h-6 text-muted-foreground" />
         </div>
       </div>
