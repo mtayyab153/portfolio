@@ -150,7 +150,7 @@ const Certifications = () => {
                     <ExternalLink className="w-3 h-3" aria-hidden="true" />
                   </a>
                 </div>
-                <div className="mt-2 font-mono text-xs text-muted-foreground/70 truncate">
+                <div className="mt-2 font-mono text-xs text-muted-foreground truncate">
                   ID: {cert.credentialId}
                 </div>
               </div>

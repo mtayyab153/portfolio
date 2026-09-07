@@ -332,7 +332,7 @@ const Contact = () => {
   <Button
     type="submit"
     aria-disabled={isLoading || cooldownLeft > 0}
-    className="w-full bg-primary text-primary-foreground hover:bg-primary/90 font-semibold aria-disabled:opacity-70 aria-disabled:cursor-not-allowed"
+    className="w-full bg-primary text-primary-foreground hover:bg-primary/90 font-semibold aria-disabled:opacity-80 aria-disabled:cursor-not-allowed"
   >
     {isLoading ? (
       <span className="flex items-center justify-center gap-2">
