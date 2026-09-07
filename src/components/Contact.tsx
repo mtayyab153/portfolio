@@ -4,13 +4,11 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useEffect, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
-import emailjs from "@emailjs/browser";
 
 // Client-side send throttle. This guards against double-submits and repeated
 // clicking; it is not a security control, since anything that does not run
 // this JavaScript is unaffected by it.
-const COOLDOWN_MS = 1 * 60 * 1000; // 10 minutes
-// const COOLDOWN_MS = 10 * 60 * 1000; // 10 minutes
+const COOLDOWN_MS = 1 * 60 * 1000; // 1 minute
 const MAX_PER_WINDOW = 3;
 const WINDOW_MS = 60 * 60 * 1000;
 const STORAGE_KEY = "contact:sends";
@@ -107,16 +105,28 @@ const Contact = () => {
     setIsLoading(true);
 
     try {
-      await emailjs.send(
-        import.meta.env.VITE_EMAILJS_SERVICE_ID,
-        import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
-        {
-          user_name: formData.name,
-          user_email: formData.email,
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
           message: formData.message,
-        },
-        import.meta.env.VITE_EMAILJS_PUBLIC_KEY
-      );
+        }),
+      });
+
+      const data: { error?: string } = await res.json().catch(() => ({}));
+
+      if (!res.ok) {
+        // The endpoint explains 400s and 429s precisely; surfacing its reason
+        // tells the visitor what to change instead of just "it failed".
+        toast({
+          title: res.status === 429 ? "Please slow down" : "Could not send message",
+          description: data.error ?? "Something went wrong. Please try again later.",
+          variant: "destructive",
+        });
+        return;
+      }
 
       toast({
         title: "Message sent!",
@@ -127,7 +137,7 @@ const Contact = () => {
       writeSends([...sends, Date.now()]);
       setCooldownLeft(Math.ceil(COOLDOWN_MS / 1000));
     } catch (error) {
-      console.error(error);
+      if (import.meta.env.DEV) console.error(error);
       toast({
         title: "Error",
         description: "Failed to send message. Please try again later.",
