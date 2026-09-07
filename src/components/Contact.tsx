@@ -2,12 +2,39 @@ import { Mail, Linkedin, Github, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import emailjs from "@emailjs/browser";
 
-// Optional: when this is unset the form works exactly as before, with no captcha.
-const RECAPTCHA_SITE_KEY = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
+// Client-side send throttle. This guards against double-submits and repeated
+// clicking; it is not a security control, since anything that does not run
+// this JavaScript is unaffected by it.
+const COOLDOWN_MS = 60000;
+const MAX_PER_WINDOW = 3;
+const WINDOW_MS = 60 * 60 * 1000;
+const STORAGE_KEY = "contact:sends";
+
+/** Recent send timestamps, oldest first, with anything outside the window dropped. */
+const readSends = (): number[] => {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    const parsed = raw ? JSON.parse(raw) : [];
+    if (!Array.isArray(parsed)) return [];
+    const cutoff = Date.now() - WINDOW_MS;
+    return parsed.filter((t): t is number => typeof t === "number" && t > cutoff);
+  } catch {
+    return [];
+  }
+};
+
+const writeSends = (sends: number[]) => {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(sends));
+  } catch {
+    // Storage blocked (private mode). The throttle still works within this
+    // page view, it just will not survive a reload.
+  }
+};
 
 
 
@@ -19,33 +46,19 @@ const Contact = () => {
     email: "",
     message: "",
   });
+  const [cooldownLeft, setCooldownLeft] = useState(0);
 
-  const captchaRef = useRef<HTMLDivElement>(null);
-  const widgetId = useRef<number | null>(null);
-
-  // Load the reCAPTCHA script on demand, only when a site key is configured.
+  // Keep the button countdown current, including after a reload.
   useEffect(() => {
-    if (!RECAPTCHA_SITE_KEY) return;
-
-    const renderWidget = () => {
-      if (!captchaRef.current || widgetId.current !== null) return;
-      widgetId.current = window.grecaptcha!.render(captchaRef.current, {
-        sitekey: RECAPTCHA_SITE_KEY,
-        theme: "dark",
-      });
+    const tick = () => {
+      const sends = readSends();
+      const last = sends[sends.length - 1];
+      const remaining = last ? COOLDOWN_MS - (Date.now() - last) : 0;
+      setCooldownLeft(remaining > 0 ? Math.ceil(remaining / 1000) : 0);
     };
-
-    if (window.grecaptcha?.render) {
-      renderWidget();
-      return;
-    }
-
-    window.onRecaptchaLoad = renderWidget;
-    const script = document.createElement("script");
-    script.src = "https://www.google.com/recaptcha/api.js?render=explicit&onload=onRecaptchaLoad";
-    script.async = true;
-    script.defer = true;
-    document.head.appendChild(script);
+    tick();
+    const id = window.setInterval(tick, 1000);
+    return () => window.clearInterval(id);
   }, []);
 
   // const handleSubmit = (e: React.FormEvent) => {
@@ -60,17 +73,26 @@ const Contact = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    let captchaToken = "";
-    if (RECAPTCHA_SITE_KEY) {
-      captchaToken = window.grecaptcha?.getResponse(widgetId.current ?? undefined) ?? "";
-      if (!captchaToken) {
-        toast({
-          title: "Please confirm you are human",
-          description: "Complete the verification below, then send your message.",
-          variant: "destructive",
-        });
-        return;
-      }
+    const sends = readSends();
+
+    if (sends.length >= MAX_PER_WINDOW) {
+      toast({
+        title: "Hourly limit reached",
+        description: `You can send ${MAX_PER_WINDOW} messages per hour. Please email me directly if it is urgent.`,
+        variant: "destructive",
+      });
+      return;
+    }
+
+    const last = sends[sends.length - 1];
+    if (last && Date.now() - last < COOLDOWN_MS) {
+      const wait = Math.ceil((COOLDOWN_MS - (Date.now() - last)) / 1000);
+      toast({
+        title: "Please wait a moment",
+        description: `You can send another message in ${wait}s.`,
+        variant: "destructive",
+      });
+      return;
     }
 
     setIsLoading(true);
@@ -83,7 +105,6 @@ const Contact = () => {
           user_name: formData.name,
           user_email: formData.email,
           message: formData.message,
-          "g-recaptcha-response": captchaToken,
         },
         import.meta.env.VITE_EMAILJS_PUBLIC_KEY
       );
@@ -94,7 +115,8 @@ const Contact = () => {
       });
 
       setFormData({ name: "", email: "", message: "" });
-      window.grecaptcha?.reset(widgetId.current ?? undefined);
+      writeSends([...sends, Date.now()]);
+      setCooldownLeft(Math.ceil(COOLDOWN_MS / 1000));
     } catch (error) {
       console.error(error);
       toast({
@@ -218,11 +240,9 @@ const Contact = () => {
               />
             </div>
             
-  {RECAPTCHA_SITE_KEY && <div ref={captchaRef} className="flex justify-center" />}
-
   <Button
     type="submit"
-    disabled={isLoading}
+    disabled={isLoading || cooldownLeft > 0}
     className="w-full bg-primary text-primary-foreground hover:bg-primary/90 font-semibold disabled:opacity-70 disabled:cursor-not-allowed"
   >
     {isLoading ? (
@@ -248,6 +268,8 @@ const Contact = () => {
         </svg>
         Sending...
       </span>
+    ) : cooldownLeft > 0 ? (
+      <>Please wait {cooldownLeft}s</>
     ) : (
       <>
         <Send className="w-4 h-4 mr-2" />
