@@ -229,7 +229,7 @@ const Contact = () => {
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                 required
-                className="bg-secondary border-border focus:border-primary"
+                className="bg-secondary focus:border-primary"
               />
             </div>
             
@@ -242,7 +242,7 @@ const Contact = () => {
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 required
-                className="bg-secondary border-border focus:border-primary"
+                className="bg-secondary focus:border-primary"
               />
             </div>
             
@@ -255,7 +255,7 @@ const Contact = () => {
                 value={formData.message}
                 onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                 required
-                className="bg-secondary border-border focus:border-primary resize-none"
+                className="bg-secondary focus:border-primary resize-none"
               />
             </div>
             
