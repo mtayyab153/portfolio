@@ -9,10 +9,18 @@ import emailjs from "@emailjs/browser";
 // Client-side send throttle. This guards against double-submits and repeated
 // clicking; it is not a security control, since anything that does not run
 // this JavaScript is unaffected by it.
-const COOLDOWN_MS = 60000;
+const COOLDOWN_MS = 10 * 60 * 1000; // 10 minutes
 const MAX_PER_WINDOW = 3;
 const WINDOW_MS = 60 * 60 * 1000;
 const STORAGE_KEY = "contact:sends";
+
+/** Renders a remaining-seconds count as "9m 05s", or "45s" under a minute. */
+const formatWait = (seconds: number) => {
+  if (seconds < 60) return `${seconds}s`;
+  const minutes = Math.floor(seconds / 60);
+  const rest = seconds % 60;
+  return `${minutes}m ${rest.toString().padStart(2, "0")}s`;
+};
 
 /** Recent send timestamps, oldest first, with anything outside the window dropped. */
 const readSends = (): number[] => {
@@ -77,8 +85,8 @@ const Contact = () => {
 
     if (sends.length >= MAX_PER_WINDOW) {
       toast({
-        title: "Hourly limit reached",
-        description: `You can send ${MAX_PER_WINDOW} messages per hour. Please email me directly if it is urgent.`,
+        title: "Too many messages",
+        description: `This form accepts ${MAX_PER_WINDOW} messages per hour. Please email me directly at mtaeyyab15@gmail.com if it is urgent.`,
         variant: "destructive",
       });
       return;
@@ -88,8 +96,8 @@ const Contact = () => {
     if (last && Date.now() - last < COOLDOWN_MS) {
       const wait = Math.ceil((COOLDOWN_MS - (Date.now() - last)) / 1000);
       toast({
-        title: "Please wait a moment",
-        description: `You can send another message in ${wait}s.`,
+        title: "Message already sent",
+        description: `Thanks - I have your message. You can send another in ${formatWait(wait)}.`,
         variant: "destructive",
       });
       return;
@@ -269,7 +277,7 @@ const Contact = () => {
         Sending...
       </span>
     ) : cooldownLeft > 0 ? (
-      <>Please wait {cooldownLeft}s</>
+      <>Please wait {formatWait(cooldownLeft)}</>
     ) : (
       <>
         <Send className="w-4 h-4 mr-2" />
