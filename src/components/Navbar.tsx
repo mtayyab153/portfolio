@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Menu, X, Bot } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -14,6 +14,7 @@ const navLinks = [
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -32,13 +33,26 @@ const Navbar = () => {
     }
   }, [isMobileMenuOpen]);
 
+  useEffect(() => {
+    if (!isMobileMenuOpen) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setIsMobileMenuOpen(false);
+        menuButtonRef.current?.focus();
+      }
+    };
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [isMobileMenuOpen]);
+
   const handleNavAction = (href: string, isDownload?: boolean) => {
     setIsMobileMenuOpen(false);
     if (isDownload) {
       window.open(href, "_blank");
     } else {
       const element = document.querySelector(href);
-      element?.scrollIntoView({ behavior: "smooth" });
+      const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      element?.scrollIntoView({ behavior: prefersReducedMotion ? "auto" : "smooth" });
     }
   };
 
@@ -82,7 +96,10 @@ const Navbar = () => {
             variant="ghost"
             size="icon"
             className="md:hidden"
+            ref={menuButtonRef}
             aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
+            aria-expanded={isMobileMenuOpen}
+            aria-controls="mobile-menu"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           >
             {isMobileMenuOpen ? <X className="w-5 h-5" aria-hidden="true" /> : <Menu className="w-5 h-5" aria-hidden="true" />}
@@ -91,7 +108,7 @@ const Navbar = () => {
 
         {/* Mobile Navigation */}
         {isMobileMenuOpen && (
-          <div className="md:hidden py-4 border-t border-border absolute top-full left-0 right-0 bg-background/95 backdrop-blur-lg z-40">
+          <div id="mobile-menu" className="md:hidden py-4 border-t border-border absolute top-full left-0 right-0 bg-background/95 backdrop-blur-lg z-40">
             <div className="flex flex-col gap-4">
               {navLinks.map((link) => (
                 <button

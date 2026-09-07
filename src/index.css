@@ -120,6 +120,28 @@
     animation: pulseSlow 4s ease-in-out infinite;
   }
 
+  /* Honour a reduced-motion preference: neutralise the fade-ups and stop the
+     infinite background pulse. The delayed fade-up classes set opacity: 0 and
+     rely on the animation to reveal them, so they are made visible explicitly -
+     without this they would stay invisible forever. */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+
+    .animate-fade-up,
+    .animate-fade-up-delay-1,
+    .animate-fade-up-delay-2,
+    .animate-fade-up-delay-3 {
+      opacity: 1 !important;
+      transform: none !important;
+    }
+  }
+
   @keyframes fadeUp {
     from {
       opacity: 0;
