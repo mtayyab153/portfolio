@@ -68,10 +68,6 @@ const projects = [
 ];
 
 const Projects = () => {
-  const handleGitHubClick = (url: string) => {
-    window.open(url, '_blank');
-  };
-
   return (
     <section id="projects" className="py-24 bg-secondary/30">
       <div className="section-container">
@@ -95,14 +91,20 @@ const Projects = () => {
               <div className="flex items-start justify-between mb-4">
                 <Folder className="w-10 h-10 text-primary" />
                 {project.githubUrl && (
-                  <Button 
-                    variant="ghost" 
-                    size="icon" 
-                    aria-label={`View ${project.title} on GitHub`}
+                  <Button
+                    asChild
+                    variant="ghost"
+                    size="icon"
                     className="opacity-0 transition-opacity group-hover:opacity-100 focus-visible:opacity-100"
-                    onClick={() => handleGitHubClick(project.githubUrl!)}
                   >
-                    <ExternalLink className="w-4 h-4" aria-hidden="true" />
+                    <a
+                      href={project.githubUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={`View ${project.title} on GitHub`}
+                    >
+                      <ExternalLink className="w-4 h-4" aria-hidden="true" />
+                    </a>
                   </Button>
                 )}
               </div>

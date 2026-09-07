@@ -45,17 +45,6 @@ const Navbar = () => {
     return () => document.removeEventListener("keydown", onKeyDown);
   }, [isMobileMenuOpen]);
 
-  const handleNavAction = (href: string, isDownload?: boolean) => {
-    setIsMobileMenuOpen(false);
-    if (isDownload) {
-      window.open(href, "_blank");
-    } else {
-      const element = document.querySelector(href);
-      const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      element?.scrollIntoView({ behavior: prefersReducedMotion ? "auto" : "smooth" });
-    }
-  };
-
   return (
     <nav 
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
@@ -74,20 +63,17 @@ const Navbar = () => {
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-8">
             {navLinks.map((link) => (
-              <button
+              <a
                 key={link.name}
-                onClick={() => handleNavAction(link.href, link.isDownload)}
+                href={link.href}
+                {...(link.isDownload ? { target: "_blank", rel: "noopener noreferrer" } : {})}
                 className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
               >
                 {link.name}
-              </button>
+              </a>
             ))}
-            <Button 
-              size="sm" 
-              className="bg-primary text-primary-foreground hover:bg-primary/90"
-              onClick={() => handleNavAction("#contact")}
-            >
-              Hire Me
+            <Button asChild size="sm" className="bg-primary text-primary-foreground hover:bg-primary/90">
+              <a href="#contact">Hire Me</a>
             </Button>
           </div>
 
@@ -111,20 +97,18 @@ const Navbar = () => {
           <div id="mobile-menu" className="md:hidden py-4 border-t border-border absolute top-full left-0 right-0 bg-background/95 backdrop-blur-lg z-40">
             <div className="flex flex-col gap-4">
               {navLinks.map((link) => (
-                <button
+                <a
                   key={link.name}
-                  onClick={() => handleNavAction(link.href, link.isDownload)}
+                  href={link.href}
+                  {...(link.isDownload ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                  onClick={() => setIsMobileMenuOpen(false)}
                   className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors text-left"
                 >
                   {link.name}
-                </button>
+                </a>
               ))}
-              <Button 
-                size="sm" 
-                className="bg-primary text-primary-foreground hover:bg-primary/90 w-full"
-                onClick={() => handleNavAction("#contact")}
-              >
-                Hire Me
+              <Button asChild size="sm" className="bg-primary text-primary-foreground hover:bg-primary/90 w-full">
+                <a href="#contact" onClick={() => setIsMobileMenuOpen(false)}>Hire Me</a>
               </Button>
             </div>
           </div>
