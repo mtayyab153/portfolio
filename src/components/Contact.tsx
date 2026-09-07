@@ -9,7 +9,8 @@ import emailjs from "@emailjs/browser";
 // Client-side send throttle. This guards against double-submits and repeated
 // clicking; it is not a security control, since anything that does not run
 // this JavaScript is unaffected by it.
-const COOLDOWN_MS = 10 * 60 * 1000; // 10 minutes
+const COOLDOWN_MS = 1 * 60 * 1000; // 10 minutes
+// const COOLDOWN_MS = 10 * 60 * 1000; // 10 minutes
 const MAX_PER_WINDOW = 3;
 const WINDOW_MS = 60 * 60 * 1000;
 const STORAGE_KEY = "contact:sends";
