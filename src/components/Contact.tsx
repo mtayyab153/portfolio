@@ -13,6 +13,32 @@ const MAX_PER_WINDOW = 3;
 const WINDOW_MS = 60 * 60 * 1000;
 const STORAGE_KEY = "contact:sends";
 
+/** Mirrors the caps enforced in api/contact.ts. */
+const LIMITS = { name: 100, email: 254, message: 2000 };
+
+type FieldName = "name" | "email" | "message";
+type FieldErrors = Partial<Record<FieldName, string>>;
+
+const validate = (data: Record<FieldName, string>): FieldErrors => {
+  const errors: FieldErrors = {};
+  const name = data.name.trim();
+  const email = data.email.trim();
+  const message = data.message.trim();
+
+  if (!name) errors.name = "Please enter your name.";
+  else if (name.length > LIMITS.name) errors.name = `Name must be ${LIMITS.name} characters or fewer.`;
+
+  if (!email) errors.email = "Please enter your email address.";
+  else if (email.length > LIMITS.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
+    errors.email = "Please enter a valid email address, for example name@example.com.";
+
+  if (!message) errors.message = "Please enter a message.";
+  else if (message.length > LIMITS.message)
+    errors.message = `Message must be ${LIMITS.message} characters or fewer.`;
+
+  return errors;
+};
+
 /** Renders a remaining-seconds count as "9m 05s", or "45s" under a minute. */
 const formatWait = (seconds: number) => {
   if (seconds < 60) return `${seconds}s`;
@@ -54,6 +80,8 @@ const Contact = () => {
     message: "",
   });
   const [cooldownLeft, setCooldownLeft] = useState(0);
+  const [errors, setErrors] = useState<FieldErrors>({});
+  const [formError, setFormError] = useState<string | null>(null);
 
   // Keep the button countdown current, including after a reload.
   useEffect(() => {
@@ -77,8 +105,26 @@ const Contact = () => {
   //   setFormData({ name: "", email: "", message: "" });
   // };
 
+  const updateField =
+    (field: FieldName) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      const { value } = e.target;
+      setFormData((prev) => ({ ...prev, [field]: value }));
+      setErrors((prev) => (prev[field] ? { ...prev, [field]: undefined } : prev));
+      setFormError(null);
+    };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setFormError(null);
+
+    // Validate before the throttle so the visitor is told what to fix first.
+    const fieldErrors = validate(formData);
+    setErrors(fieldErrors);
+    const firstInvalid = (["name", "email", "message"] as FieldName[]).find((k) => fieldErrors[k]);
+    if (firstInvalid) {
+      document.getElementById(firstInvalid)?.focus();
+      return;
+    }
 
     const sends = readSends();
 
@@ -120,6 +166,7 @@ const Contact = () => {
       if (!res.ok) {
         // The endpoint explains 400s and 429s precisely; surfacing its reason
         // tells the visitor what to change instead of just "it failed".
+        setFormError(data.error ?? "Something went wrong. Please try again later.");
         toast({
           title: res.status === 429 ? "Please slow down" : "Could not send message",
           description: data.error ?? "Something went wrong. Please try again later.",
@@ -220,17 +267,23 @@ const Contact = () => {
             </div>
           </div>
 
-          <form onSubmit={handleSubmit} className="bg-card border border-border rounded-2xl p-8 space-y-6">
+          <form onSubmit={handleSubmit} noValidate className="bg-card border border-border rounded-2xl p-8 space-y-6">
             <div>
               <label htmlFor="name" className="block text-sm font-medium mb-2">Name</label>
               <Input 
                 id="name"
                 placeholder="Your name"
                 value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                onChange={updateField("name")}
                 required
+                maxLength={LIMITS.name}
+                aria-invalid={!!errors.name}
+                aria-describedby={errors.name ? "name-error" : undefined}
                 className="bg-secondary focus:border-primary"
               />
+              {errors.name && (
+                <p id="name-error" className="mt-2 text-sm text-destructive">{errors.name}</p>
+              )}
             </div>
             
             <div>
@@ -240,10 +293,16 @@ const Contact = () => {
                 type="email"
                 placeholder="your@email.com"
                 value={formData.email}
-                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                onChange={updateField("email")}
                 required
+                maxLength={LIMITS.email}
+                aria-invalid={!!errors.email}
+                aria-describedby={errors.email ? "email-error" : undefined}
                 className="bg-secondary focus:border-primary"
               />
+              {errors.email && (
+                <p id="email-error" className="mt-2 text-sm text-destructive">{errors.email}</p>
+              )}
             </div>
             
             <div>
@@ -253,12 +312,22 @@ const Contact = () => {
                 placeholder="Tell me about your project..."
                 rows={5}
                 value={formData.message}
-                onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                onChange={updateField("message")}
                 required
+                maxLength={LIMITS.message}
+                aria-invalid={!!errors.message}
+                aria-describedby={errors.message ? "message-error" : undefined}
                 className="bg-secondary focus:border-primary resize-none"
               />
+              {errors.message && (
+                <p id="message-error" className="mt-2 text-sm text-destructive">{errors.message}</p>
+              )}
             </div>
             
+  {formError && (
+    <p role="alert" className="text-sm text-destructive">{formError}</p>
+  )}
+
   <Button
     type="submit"
     disabled={isLoading || cooldownLeft > 0}
