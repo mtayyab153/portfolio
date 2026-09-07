@@ -23,8 +23,7 @@ dist-ssr
 *.sln
 *.sw?
 
-# Environment variables
-.env
-.env.local
-.env.development
-.env.production
+# Environment variables - wildcard so stray files like .env.backup
+# or .env.tmp cannot be committed by accident
+.env*
+!.env.example
