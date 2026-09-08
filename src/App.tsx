@@ -1,10 +1,11 @@
 import { Toaster } from "@/components/ui/toaster";
+import ErrorBoundary from "@/components/ErrorBoundary";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 
 const App = () => (
-  <>
+  <ErrorBoundary>
     <Toaster />
     <BrowserRouter>
       <Routes>
@@ -12,7 +13,7 @@ const App = () => (
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
-  </>
+  </ErrorBoundary>
 );
 
 export default App;
