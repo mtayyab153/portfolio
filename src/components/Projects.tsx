@@ -5,14 +5,14 @@ const projects = [
   {
     title: "Intent Classification App",
     description: "Designed and deployed a text classification solution by training and optimizing a Scikit-learn model on a custom dataset. Applied feature engineering techniques such as tokenization and vectorization to transform raw text into meaningful numerical representations before training the model using classical machine learning algorithms. Evaluated model performance with multiple metrics, including accuracy, precision, recall, and F1-score, and documented key limitations and edge cases related to domain-specific text and data imbalance. Integrated the model into a FastAPI service with prediction and health-check endpoints, and containerized the complete application using Docker for consistent and scalable deployment environments.",
-    tags: ["Python", "Sickit Learn", "Fast Api", "Pandas"],
+    tags: ["Python", "Scikit-learn", "FastAPI", "Pandas"],
     impact: "Built and deployed a scalable intent classification ML service",
     githubUrl: "https://github.com/mtayyab153/intent_classification_api"
   },
   {
     title: "Todo Management REST API",
-    description: "Developed a secure Todo application with well-structured REST endpoints, proper exception handling, and accurateHTTP response codes. Integrated a relational database with support for schema changes through a data migrationtool. Implemented strong request/response validation and JWT-based authentication with role-based authorization, including admin-exclusive operations. Added complete automated test coverage for all endpoints to ensure reliability and data integrity.",
-    tags: ["Python", "Fast Api", "SQL Alchemy", "Alembic"],
+    description: "Developed a secure Todo application with well-structured REST endpoints, proper exception handling, and accurate HTTP response codes. Integrated a relational database with support for schema changes through a data migrationtool. Implemented strong request/response validation and JWT-based authentication with role-based authorization, including admin-exclusive operations. Added complete automated test coverage for all endpoints to ensure reliability and data integrity.",
+    tags: ["Python", "FastAPI", "SQLAlchemy", "Alembic"],
     impact: "Delivered a secure, scalable, and well-tested REST API",
     githubUrl: "https://github.com/mtayyab153/Python/tree/main/Fast%20API/Project%205%20Todo%20App%20Full%20Stack"
   },
@@ -27,14 +27,14 @@ const projects = [
     title: "Blocking Malicious IP, Domains and Hashes",
     description: "The process begins with receiving an email containing malicious IPs, domains, and file hashes. These indicators are extracted and stored in a database with an initial status of 'To Work'. Each item is then processed for blocking across the respective security portals. Based on the outcome, their statuses are updated to 'Completed' or 'Failed'. Failed entries are then retried when it is triggered again. At the end of the day, a comprehensive report is generated and sent to the client.",
     tags: ["RPA", "Email", "Oracle", "Reporting"],
-    impact: "Enhanced document understanding through accurate, context-aware question answering",
+    impact: "Improved security operations by automating threat blocking and incident reporting",
     githubUrl: "https://github.com/mtayyab153"
   },
   {
     title: "RAG-Based Document QA System",
     description: "Built a retrieval-augmented Q&A application that processes PDF document, chunks and embeds content for semantic search, stores vectors in vector database, and generates answers by retrieving relevant information during user queries.",
-    tags: ["Python", "Langchain", "Gemini", "Pinecone"],
-    impact: "Improved security operations by automating threat blocking and incident reporting",
+    tags: ["Python", "LangChain", "Gemini", "Pinecone"],
+    impact: "Enhanced document understanding through accurate, context-aware question answering",
     githubUrl: "https://github.com/mtayyab153/Python/tree/main/iNueron%20Gen%20Ai/6_chroma_db"
   },
   {
