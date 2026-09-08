@@ -28,9 +28,20 @@ const prune = (now: number): void => {
 };
 
 const clientIp = (req: VercelRequest): string => {
+  // Vercel sets x-real-ip to the true edge-observed client IP, which the client
+  // cannot forge. x-forwarded-for is "<client-supplied...>, <real edge IP>", so
+  // its LEFTMOST entry is attacker-controlled and its rightmost is the trusted
+  // one Vercel appended. Keying the rate limiter on the leftmost value let a
+  // caller rotate the header and land in a fresh bucket every request, defeating
+  // the limit. Prefer x-real-ip; fall back to the rightmost forwarded entry.
+  const realIp = req.headers["x-real-ip"];
+  const real = Array.isArray(realIp) ? realIp[0] : realIp;
+  if (real) return real.trim();
+
   const xff = req.headers["x-forwarded-for"];
   const raw = Array.isArray(xff) ? xff[0] : xff;
-  return (raw ?? "").split(",")[0].trim() || "unknown";
+  const parts = (raw ?? "").split(",").map((p) => p.trim()).filter(Boolean);
+  return parts[parts.length - 1] || "unknown";
 };
 
 const str = (v: unknown): string => (typeof v === "string" ? v.trim() : "");
