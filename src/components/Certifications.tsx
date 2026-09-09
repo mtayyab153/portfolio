@@ -1,6 +1,31 @@
 import { Award, ExternalLink, Calendar } from "lucide-react";
 
-const certifications = [
+type Certification = {
+  name: string;
+  issuer: string;
+  date: string;
+  credentialId?: string;
+  link?: string;
+  logo: string;
+};
+
+const certifications: Certification[] = [
+  {
+    name: "Claude Code 101",
+    issuer: "Anthropic Education",
+    date: "2026",
+    credentialId: "Claude-Code-101",
+    link: "https://verify.skilljar.com/c/8oarvo3dmfgf",
+    logo: "⌨️"
+  },
+  {
+    name: "Claude 101",
+    issuer: "Anthropic Education",
+    date: "2026",
+    credentialId: "Claude-101",
+    link: "https://verify.skilljar.com/c/vzie6jmtke2x",
+    logo: "✳️"
+  },
   {
     name: "LFS101: Introduction to Linux",
     issuer: "The Linux Foundation",
@@ -18,20 +43,20 @@ const certifications = [
     logo: "🧠"
   },
   {
-    name: "AI Engineer Agentic Track: The Complete Agent & MCP Course",
-    issuer: "Udemy",
-    date: "2026",
-    credentialId: "UC-d1d0640d-b9f6-4d20-aeb9-81d8c60110c3",
-    link: "https://www.udemy.com/certificate/UC-d1d0640d-b9f6-4d20-aeb9-81d8c60110c3/",
-    logo: "🔗"
-  },
-  {
     name: "AI Engineer Production Track: Deploy LLMs & Agents at Scale",
     issuer: "Udemy",
     date: "2026",
     credentialId: "UC-42051883-a00d-40b8-8103-caabb2603298",
     link: "https://www.udemy.com/certificate/UC-42051883-a00d-40b8-8103-caabb2603298/",
     logo: "🚀"
+  },
+  {
+    name: "AI Engineer Agentic Track: The Complete Agent & MCP Course",
+    issuer: "Udemy",
+    date: "2026",
+    credentialId: "UC-d1d0640d-b9f6-4d20-aeb9-81d8c60110c3",
+    link: "https://www.udemy.com/certificate/UC-d1d0640d-b9f6-4d20-aeb9-81d8c60110c3/",
+    logo: "🔗"
   },
   {
     name: "UiPath Academy Automation Developer Associate Training",
@@ -139,20 +164,24 @@ const Certifications = () => {
                     <Calendar className="w-4 h-4" />
                     <span>{cert.date}</span>
                   </div>
-                  <a
-                    href={cert.link}
-                    className="inline-flex items-center gap-1 py-1 text-primary hover:underline"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={`Verify ${cert.name} (opens in a new tab)`}
-                  >
-                    <span>Verify</span>
-                    <ExternalLink className="w-3 h-3" aria-hidden="true" />
-                  </a>
+                  {cert.link && (
+                    <a
+                      href={cert.link}
+                      className="inline-flex items-center gap-1 py-1 text-primary hover:underline"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={`Verify ${cert.name} (opens in a new tab)`}
+                    >
+                      <span>Verify</span>
+                      <ExternalLink className="w-3 h-3" aria-hidden="true" />
+                    </a>
+                  )}
                 </div>
-                <div className="mt-2 font-mono text-xs text-muted-foreground truncate">
-                  ID: {cert.credentialId}
-                </div>
+                {cert.credentialId && (
+                  <div className="mt-2 font-mono text-xs text-muted-foreground truncate">
+                    ID: {cert.credentialId}
+                  </div>
+                )}
               </div>
 
               <div className="absolute top-4 right-4">
